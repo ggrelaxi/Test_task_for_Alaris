@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div class="control_container">
+            <div class="control_buttons">
+                <button class="one_step_up" type="button" /><i class="fa fa-angle-up fa-2x" aria-hidden="true"></i></button>
+                <button class="move_to_top" type="button" /><i class="fa fa-angle-double-up fa-2x" aria-hidden="true"></i></button>
+                <button class="one_step_down" type="button" /><i class="fa fa-angle-down fa-2x" aria-hidden="true"></i></button>
+                <button class="move_to_down" type="button" /><i class="fa fa-angle-double-down fa-2x" aria-hidden="true"></i></button>
+            </div>
+            <div class="control_block">
+                <div class="header">Available</div>
+                <div class="search_block">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input type="text" placeholder="Search items"/>
+                </div>
+                <div class="item_list">
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 1</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 2</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                </div>
+            </div>
+            <div class="control_buttons">
+                <button class="move_right_active_element" type="button" /><i class="fa fa-angle-right fa-2x" aria-hidden="true"></i></button>
+                <button class="move_right_all" type="button" /><i class="fa fa-angle-double-right fa-2x" aria-hidden="true"></i></button>
+                <button class="move_left_active_element" type="button" /><i class="fa fa-angle-left fa-2x" aria-hidden="true"></i></button>
+                <button class="move_left_all" type="button" /><i class="fa fa-angle-double-left fa-2x" aria-hidden="true"></i></button>
+            </div>
+            <div class="control_block">
+                <div class="header">Selected</div>
+                <div class="search_block">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input type="text" placeholder="Search items"/>
+                </div>
+                <div class="item_list">
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 1</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 2</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                    <div class="control_item">
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">Наименование 3</div>
+                        <div class="item_status">Доступен</div>
+                    </div>
+                </div>
+            </div>
+            <div class="control_buttons">
+                <button class="one_step_up" type="button" /><i class="fa fa-angle-up fa-2x" aria-hidden="true"></i></button>
+                <button class="move_to_top" type="button" /><i class="fa fa-angle-double-up fa-2x" aria-hidden="true"></i></button>
+                <button class="one_step_down" type="button" /><i class="fa fa-angle-down fa-2x" aria-hidden="true"></i></button>
+                <button class="move_to_down" type="button" /><i class="fa fa-angle-double-down fa-2x" aria-hidden="true"></i></button>
+            </div>
+            <div class="add_new_list_element">
+                <div class="add_new_list_element_header">Add new item in available list</div>
+                <input type="text" placeholder="item name" />
+                <button type="button">ADD</button>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

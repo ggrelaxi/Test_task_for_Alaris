@@ -146,13 +146,13 @@ table {
     padding-right: 30px;
 }
 
-.item_list {
+.items_list {
     height: 409px;
     width: 100%;
     overflow-y: auto;
 }
 
-.item_list .control_item {
+.items_list .item {
     padding: 15px;
     display: flex;
     align-items: center;
@@ -162,26 +162,27 @@ table {
     cursor: pointer;
 }
 
-.item_list .control_item:hover {
+.items_list .item:hover {
     background-color: #d9e0e3;
 }
 
-.control_item img {
+.item img {
     display: block;
     width: 40px;
     height: 40px;
 }
 
-.control_item .item_header {
+.item .item_header {
     font-weight: 700;
 }
 
-.control_item .item_status {
+.item .item_status {
     background-color: #b2ddb4;
     padding: 5px;
+    font-size: 12px;
 }
 
-.add_new_list_element {
+.bottom_buttons_container {
     width: 100%;
     margin: 20px 10px 20px 50px;
     display: flex;
@@ -189,25 +190,25 @@ table {
     align-items: center;
 }
 
-.add_new_list_element_header {
+.bottom_buttons_container_header {
     width: 100%;
     margin-bottom: 10px;
 }
 
-.add_new_list_element input {
+.bottom_buttons_container input {
     border: 1px solid #dee2e6;
     padding: 7px;
-    width: 320px;
+    width: 170px;
     box-sizing: border-box;
     position: relative;
     margin-right: 20px;
 }
 
-.add_new_list_element input:focus {
+.bottom_buttons_container input:focus {
     border: 1px solid #2196F3;
 }
 
-.add_new_list_element button {
+.bottom_buttons_container button {
     height: 32px;
     width: 60px;
     background: #2196F3;
@@ -215,4 +216,22 @@ table {
     border: none;
     font-weight: 700;
     color: #fff;
+}
+
+.bottom_buttons_container .add_button {
+    margin-right: 10px;
+}
+
+.bottom_buttons_container .add_button:disabled {
+    background-color: #d9e0e3;
+}
+
+.bottom_buttons_container .restore_button {
+    width: 140px;
+}
+
+.bottom_buttons_container .send_button {
+    width: 200px;
+    margin-left: auto;
+    margin-right: 40px;
 }

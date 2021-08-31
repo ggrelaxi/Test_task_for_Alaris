@@ -556,6 +556,7 @@ class Control {
                 resultSort.push(currentItem)
             }
         }
+        console.log(resultSort)
         this.activeAvailableElementOrder = null;
         this.availableItemsForView = resultSort;
         this.renderAvailableItems(this.availableItemsListContainer);
@@ -577,10 +578,11 @@ class Control {
     }
 
     oneElementLeftHandler = (e, list, activeElementOrder) => {
-        if (!activeElementOrder || activeElementOrder === list.length) {
+        if (!activeElementOrder) {
             return;
         }
         const currentElement = this.selectedItemsForView[activeElementOrder - 1];
+        console.log(currentElement)
         currentElement.order = this.availableItemsForView.length + 1;
         this.availableItemsForView = [...this.availableItemsForView, currentElement];
         const resultSort = [];

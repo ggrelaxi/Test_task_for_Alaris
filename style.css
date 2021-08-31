@@ -177,9 +177,18 @@ table {
 }
 
 .item .item_status {
-    background-color: #b2ddb4;
+    background-color: red;
     padding: 5px;
+    color: #fff;
     font-size: 12px;
+}
+
+.item .item_status:hover {
+    text-decoration: underline;
+}
+
+.item .item_selected_status .fa {
+    color: #41cd41;
 }
 
 .bottom_buttons_container {
@@ -228,10 +237,42 @@ table {
 
 .bottom_buttons_container .restore_button {
     width: 140px;
+    margin-right: 10px;
 }
 
 .bottom_buttons_container .send_button {
     width: 200px;
     margin-left: auto;
     margin-right: 40px;
+}
+
+.bottom_buttons_container .show_button {
+    width: 120px;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.bottom_buttons_container .show_button:disabled {
+    background-color: #d9e0e3;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.active_bg {
+    background-color: aliceblue;
+    border: 1px solid #2196F3;
+}
+
+#add_new_control {
+    height: 32px;
+    width: 200px;
+    background: #2196F3;
+    cursor: pointer;
+    border: none;
+    font-weight: 700;
+    color: #fff;
+    margin: 30px 50px 30px auto;
+    display: block;
 }

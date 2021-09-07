@@ -159,11 +159,23 @@ table {
     justify-content: space-between;
     height: 60px;
     box-sizing: border-box;
-    cursor: pointer;
+    cursor: move;
+    border: 1px solid rgba(200,200,200, 0.5);
+    border-left: none;
+    border-right: none;
+    margin: 10px 0;
 }
 
-.items_list .item:hover {
-    background-color: #d9e0e3;
+.item_hover {
+    background-color: #d9e0e3 !important;
+}
+
+.items_list .item.active:hover {
+    background-color: none;
+}
+
+.items_list .selected {
+    background-color: cornsilk !important;
 }
 
 .item img {
@@ -185,6 +197,7 @@ table {
 
 .item .item_status:hover {
     text-decoration: underline;
+    cursor: pointer !important;
 }
 
 .item .item_selected_status .fa {

@@ -14,6 +14,10 @@ class Control {
     addNewItemButton;
     activeAvailableElementOrder = null;
     activeSelectedElementOrder = null;
+    availableDragElementOrder = null;
+    availableDragElementNextOrder = null;
+    selectedDragElementOrder = null;
+    selectedDragElementNextOrder = null;
 
     constructor() {
         this.initComponent();
@@ -124,6 +128,49 @@ class Control {
     generateAvailableContainer = () => {
         const availableContainer = document.createElement('div');
         availableContainer.classList.add('control_block');
+        availableContainer.addEventListener('dragstart', (event) => {
+            event.target.classList.add('selected')
+            this.availableDragElementOrder = Number(event.target.dataset.order);
+        })
+        availableContainer.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            const itemToMove = availableContainer.querySelector('.selected');
+            const currentItem = event.target;
+            const isMoveable = itemToMove !== currentItem && currentItem.classList.contains('item');
+            if (!isMoveable) {
+                return;
+            };
+
+            const nextElement = this.getNextVerticalElement(event.clientY, currentItem);
+
+            if (nextElement && itemToMove === nextElement.previousElementSibling || itemToMove === nextElement) {
+                return;
+            }
+            this.availableItemsListContainer.insertBefore(itemToMove, nextElement)
+            const currentItems = this.availableItemsListContainer.querySelectorAll('.item')
+            if (nextElement === null) {
+                this.activeAvailableElementOrder = this.availableItemsForView.length;
+            } else if (Number(nextElement.dataset.order) > Number(itemToMove.dataset.order)) {
+                this.activeAvailableElementOrder = Number(nextElement.dataset.order) - 1;
+            } else if (Number(nextElement.dataset.order) < Number(itemToMove.dataset.order)) {
+                this.activeAvailableElementOrder = Number(nextElement.dataset.order);
+            }
+            currentItems.forEach((item, index) => {
+                this.availableItemsForView[index].order = index + 1;
+                this.availableItemsForView[index].name = item.querySelector('.item_header').innerText;
+            })
+        })
+        availableContainer.addEventListener('dragend', (event) => {
+            event.target.classList.remove('selected')
+            if (this.availableDragElementOrder === this.availableDragElementNextOrder) {
+                return;
+            }
+            this.availableDragElementOrder = null;
+            this.availableDragElementNextOrder = null;
+            this.activeSelectedElementOrder = null;
+
+            this.renderAvailableItems(this.availableItemsListContainer)
+        })
 
         const header = document.createElement('div');
         header.classList.add('header');
@@ -147,88 +194,49 @@ class Control {
         this.availableItemsListContainer = itemsList;
         this.renderAvailableItems(itemsList)
         availableContainer.appendChild(itemsList)
-
         this.componentContainer.appendChild(availableContainer)
-    }
-
-    renderAvailableItems = (container) => {
-        container.innerHTML = '';
-        this.availableItemsForView.forEach((item) => {
-            const itemBlock = document.createElement('div');
-            itemBlock.addEventListener('click', (e) => this.availableItemClickHandler(e, item.order));
-            itemBlock.classList.add('item')
-            itemBlock.setAttribute('data-order', item.order)
-            if (item.visible) {
-                itemBlock.classList.remove('d-none')
-            } else {
-                itemBlock.classList.add('d-none')
-            }
-
-            if (item.order === this.activeAvailableElementOrder) {
-                itemBlock.classList.add('active_bg')
-            } else {
-                itemBlock.classList.remove('active-bg');
-            }
-            itemBlock.innerHTML = `
-                        <img src="img/item_icon.png" alt="item_icon">
-                        <div class="item_header">${item.name}</div>
-                `
-            const deleteBlock = document.createElement('div');
-            deleteBlock.classList.add('item_status');
-            deleteBlock.innerText = 'Удалить'
-            deleteBlock.addEventListener('click', (e) => this.deleteAvailableElementFromList(e, item.order))
-            itemBlock.appendChild(deleteBlock);
-            container.append(itemBlock);
-        })
-    }
-
-    availableItemClickHandler = (e, order) => {
-        const currentOrder = this.activeAvailableElementOrder;
-        if (currentOrder === order) {
-            this.oneElementRightHandler(e, this.availableItemsForView, this.activeAvailableElementOrder);
-            this.activeAvailableElementOrder = null;
-        } else {
-            this.activeAvailableElementOrder = order;
-        }
-
-        this.renderAvailableItems(this.availableItemsListContainer);
-    }
-
-    selectedItemClickHandler = (e, order) => {
-        const currentOrder = this.activeSelectedElementOrder;
-        if (currentOrder === order) {
-            this.oneElementLeftHandler(e, this.selectedItemsForView, this.activeSelectedElementOrder);
-            this.activeSelectedElementOrder = null;
-        } else {
-            this.activeSelectedElementOrder = order;
-        }
-
-        this.renderSelectedItems(this.selectedItemsListContainer);
-    }
-
-    deleteAvailableElementFromList = (e, order) => {
-        e.stopPropagation();
-        const previousAvailableList = this.availableItemsForView.slice();
-        const currentAvailableList = [];
-        for (let i = 0; i < previousAvailableList.length; i++) {
-            if (i < order - 1) {
-                currentAvailableList.push(previousAvailableList[i])
-            } else if (i === order - 1) {
-                continue
-            } if (i > order - 1) {
-                const currentAvailableItem = previousAvailableList[i]
-                currentAvailableItem.order = currentAvailableItem.order - 1;
-                currentAvailableList.push(currentAvailableItem)
-            }
-        }
-        this.availableItemsForView = currentAvailableList;
-        this.activeAvailableElementOrder = null;
-        this.renderAvailableItems(this.availableItemsListContainer)
     }
 
     generateSelectedContainer = () => {
         const selectedContainer = document.createElement('div');
         selectedContainer.classList.add('control_block');
+        selectedContainer.addEventListener('dragstart', (event) => {
+            event.target.classList.add('selected')
+            this.selectedDragElementOrder = Number(event.target.dataset.order);
+        })
+        selectedContainer.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            const itemToMove = selectedContainer.querySelector('.selected');
+            const currentItem = event.target;
+            const isMoveable = itemToMove !== currentItem && currentItem.classList.contains('item');
+
+            if (!isMoveable) {
+                return;
+            }
+            const nextElement = this.getNextVerticalElement(event.clientY, currentItem);
+
+            if (nextElement && itemToMove === nextElement.previousElementSibling || itemToMove === nextElement) {
+                return;
+            }
+
+            this.selectedItemsListContainer.insertBefore(itemToMove, nextElement);
+            const currentItems = this.selectedItemsListContainer.querySelectorAll('.item');
+            currentItems.forEach((item, index) => {
+                this.selectedItemsForView[index].order = index + 1;
+                this.selectedItemsForView[index].name = item.querySelector('.item_header').innerText;
+            })
+        })
+        selectedContainer.addEventListener('dragend', (event) => {
+            event.target.classList.remove('selected');
+            if ((this.selectedDragElementOrder + 1) === this.selectedDragElementNextOrder) {
+                return;
+            }
+            this.selectedDragElementNextOrder = null;
+            this.selectedDragElementOrder = null;
+            this.activeSelectedElementOrder = null;
+            this.activeAvailableElementOrder = null;
+            this.renderSelectedItems(this.selectedItemsListContainer);
+        })
 
         const header = document.createElement('div');
         header.classList.add('header');
@@ -256,14 +264,61 @@ class Control {
         this.componentContainer.appendChild(selectedContainer)
     }
 
+    renderAvailableItems = (container) => {
+        container.innerHTML = '';
+        this.availableItemsForView.forEach((item) => {
+            const itemBlock = document.createElement('div');
+            itemBlock.addEventListener('click', (e) => this.availableItemClickHandler(e, item.order), false);
+            itemBlock.addEventListener('mouseenter', (e) => {
+                itemBlock.classList.add('item_hover')
+            })
+            itemBlock.addEventListener('mouseover', (e) => {
+                itemBlock.classList.add('item_hover')
+            })
+            itemBlock.addEventListener('mouseout', (e) => itemBlock.classList.remove('item_hover'))
+            itemBlock.classList.add('item')
+            itemBlock.setAttribute('data-order', item.order)
+            itemBlock.draggable = true;
+            if (item.visible) {
+                itemBlock.classList.remove('d-none')
+            } else {
+                itemBlock.classList.add('d-none')
+            }
+
+            if (item.order === this.activeAvailableElementOrder) {
+                itemBlock.classList.add('active_bg')
+            } else {
+                itemBlock.classList.remove('active-bg');
+            }
+            itemBlock.innerHTML = `
+                        <img src="img/item_icon.png" alt="item_icon">
+                        <div class="item_header">${item.name}</div>
+                `
+            const deleteBlock = document.createElement('div');
+            deleteBlock.classList.add('item_status');
+            deleteBlock.innerText = 'Удалить'
+            deleteBlock.addEventListener('click', (e) => this.deleteAvailableElementFromList(e, item.order))
+            itemBlock.appendChild(deleteBlock);
+
+            container.append(itemBlock);
+        })
+    }
+
     renderSelectedItems = (container) => {
         container.innerHTML = '';
         this.selectedItemsForView.forEach((item) => {
             const itemBlock = document.createElement('div');
-            itemBlock.classList.add('item')
             itemBlock.addEventListener('click', (e) => this.selectedItemClickHandler(e, item.order));
+            itemBlock.addEventListener('mouseenter', (e) => {
+                itemBlock.classList.add('item_hover')
+            })
+            itemBlock.addEventListener('mouseover', (e) => {
+                itemBlock.classList.add('item_hover')
+            })
+            itemBlock.addEventListener('mouseout', (e) => itemBlock.classList.remove('item_hover'))
             itemBlock.classList.add('item')
             itemBlock.setAttribute('data-order', item.order);
+            itemBlock.draggable = true;
             if (item.visible) {
                 itemBlock.classList.remove('d-none')
             } else {
@@ -281,6 +336,52 @@ class Control {
                 `
             container.append(itemBlock);
         })
+    }
+
+    availableItemClickHandler = (e, order) => {
+        const currentOrder = this.activeAvailableElementOrder;
+        if (currentOrder === order) {
+            this.oneElementRightHandler(e, this.availableItemsForView, this.activeAvailableElementOrder);
+            this.activeAvailableElementOrder = null;
+            this.activeSelectedElementOrder = null;
+        } else {
+            this.activeAvailableElementOrder = order;
+            this.activeSelectedElementOrder = null;
+            this.renderAvailableItems(this.availableItemsListContainer);
+        }
+    }
+
+    selectedItemClickHandler = (e, order) => {
+        const currentOrder = this.activeSelectedElementOrder;
+        if (currentOrder === order) {
+            this.oneElementLeftHandler(e, this.selectedItemsForView, this.activeSelectedElementOrder);
+            this.activeSelectedElementOrder = null;
+            this.activeAvailableElementOrder = null;
+        } else {
+            this.activeSelectedElementOrder = order;
+            this.activeAvailableElementOrder = null;
+            this.renderSelectedItems(this.selectedItemsListContainer);
+        }
+    }
+
+    deleteAvailableElementFromList = (e, order) => {
+        e.stopPropagation();
+        const previousAvailableList = this.availableItemsForView.slice();
+        const currentAvailableList = [];
+        for (let i = 0; i < previousAvailableList.length; i++) {
+            if (i < order - 1) {
+                currentAvailableList.push(previousAvailableList[i])
+            } else if (i === order - 1) {
+                continue
+            } if (i > order - 1) {
+                const currentAvailableItem = previousAvailableList[i]
+                currentAvailableItem.order = currentAvailableItem.order - 1;
+                currentAvailableList.push(currentAvailableItem)
+            }
+        }
+        this.availableItemsForView = currentAvailableList;
+        this.activeAvailableElementOrder = null;
+        this.renderAvailableItems(this.availableItemsListContainer)
     }
 
     generateBottomButtons = () => {
@@ -556,8 +657,9 @@ class Control {
                 resultSort.push(currentItem)
             }
         }
-        console.log(resultSort)
+
         this.activeAvailableElementOrder = null;
+        this.activeSelectedElementOrder = null;
         this.availableItemsForView = resultSort;
         this.renderAvailableItems(this.availableItemsListContainer);
         this.renderSelectedItems(this.selectedItemsListContainer);
@@ -582,7 +684,6 @@ class Control {
             return;
         }
         const currentElement = this.selectedItemsForView[activeElementOrder - 1];
-        console.log(currentElement)
         currentElement.order = this.availableItemsForView.length + 1;
         this.availableItemsForView = [...this.availableItemsForView, currentElement];
         const resultSort = [];
@@ -599,6 +700,7 @@ class Control {
 
         this.selectedItemsForView = resultSort;
         this.activeSelectedElementOrder = null;
+        this.activeAvailableElementOrder = null;
         this.renderSelectedItems(this.selectedItemsListContainer);
         this.renderAvailableItems(this.availableItemsListContainer);
     }
@@ -675,9 +777,18 @@ class Control {
     getRandomValue = () => {
         return Math.floor(Math.random() * (20 - 1) ) + 1;
     }
+
+    getNextVerticalElement = (cursorPosition, currentItem) => {
+        const currentItemCoords = currentItem.getBoundingClientRect();
+        const currentItemCenter = currentItemCoords.y + currentItemCoords.height / 2;
+        const nextElement = (cursorPosition < currentItemCenter) ?
+            currentItem : currentItem.nextElementSibling;
+        return nextElement;
+    }
 }
 
 const controlInstance = new Control();
+
 const initApp = () => {
     const rootContainer = document.getElementById('app');
     const controls = [];
